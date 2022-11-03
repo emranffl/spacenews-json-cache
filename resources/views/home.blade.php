@@ -15,32 +15,28 @@
         if ($articlesJSONPath) {
             $articles = json_decode(file_get_contents($articlesJSONPath), true);
     
-            if (!count($articles)) {
+            if (count($articles) == 0) {
                 // fetching articles from API
                 $articles = (new Fetch())->fetch_articles();
     
                 // caching articles to JSON file
-                // file_put_contents($articlesJSONPath, json_encode($articles));
+                file_put_contents($articlesJSONPath, json_encode($articles));
             }
         }
     
         if ($marsPhotoJSONPath) {
             $marsPhotoCollection = json_decode(file_get_contents($marsPhotoJSONPath), true);
     
-            if (!count($marsPhotoCollection)) {
+            if (count($marsPhotoCollection) == 0) {
                 // fetching mars photos from API
                 $marsPhotoCollection = (new Fetch())->fetch_mars_photos();
     
                 // caching mars photos to JSON file
-                // file_put_contents($marsPhotoJSONPath, json_encode($marsPhotoCollection));
+                file_put_contents($marsPhotoJSONPath, json_encode($marsPhotoCollection));
             }
         }
     } catch (\Throwable $th) {
-        $redisAvailable = false;
-        $fetch = new Fetch();
-    
-        $articles = $fetch->fetch_articles();
-        $marsPhotoCollection = $fetch->fetch_mars_photos();
+        error_log($th->getMessage());
     }
 @endphp
 
@@ -52,8 +48,9 @@
                 warning
             </span>
             <div class="pl-4 text-sm font-normal">
-                The results are served from the API, `redis-server` is not installed in the current hosting environment,
-                thus, the results are not cached.
+                The results are served from the API on first hit, `redis-server` is not installed in the current hosting
+                environment,
+                thus, the results are cashed by custom algorithm in JSON format.
             </div>
             <button type="button"
                 class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
