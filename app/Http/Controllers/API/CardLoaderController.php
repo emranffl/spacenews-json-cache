@@ -4,8 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Functions\Fetch;
-use Illuminate\Support\Facades\Cache;
 
 class CardLoaderController extends Controller
 {
@@ -20,28 +18,23 @@ class CardLoaderController extends Controller
         $limit = 12;
         $viewHTML = '';
 
-        // try {
+        $articlesJSONPath = storage_path() . '/json/articles-data.json';
+        $marsPhotoJSONPath = storage_path() . '/json/mars-photo-data.json';
 
-        //     if (Cache::has('cachedArticles') && Cache::has('cachedMarsPhotoData')) {
-        //         $articles = Cache::store('redis')->get('cachedArticles');
-        //         $marsPhotoCollection = Cache::store('redis')->get('cachedMarsPhotoData');
-        //     } else
-        //         return ['redirect' => '/'];
-        // } catch (Throwable $th) {
-        //     $fetch = new Fetch();
+        if ($articlesJSONPath && $marsPhotoJSONPath) {
+            $articles = json_decode(file_get_contents($articlesJSONPath), true);
+            $marsPhotoCollection = json_decode(file_get_contents($marsPhotoJSONPath), true);
+        } else
+            return ['redirect' => '/'];
 
-        //     $articles = $fetch->fetch_articles();
-        //     $marsPhotoCollection = $fetch->fetch_mars_photos();
-        // }
+        $photoObject = $marsPhotoCollection[array_rand($marsPhotoCollection, 1)];
 
-        // $photoObject = $marsPhotoCollection[array_rand($marsPhotoCollection, 1)];
+        foreach (array_splice($articles, $offset, $limit) as $index => $article) {
+            $loop = (object)['index' => $index];
 
-        // foreach (array_splice($articles, $offset, $limit) as $index => $article) {
-        //     $loop = (object)['index' => $index];
+            $viewHTML .= view('components.card', compact('loop', 'limit', 'article', 'marsPhotoCollection', 'photoObject'));
+        }
 
-        //     $viewHTML .= view('components.card', compact('loop', 'limit', 'article', 'marsPhotoCollection', 'photoObject'));
-        // }
-
-        // return ['view' => $viewHTML, 'eod' => ($offset + $limit) > count($articles)];
+        return ['view' => $viewHTML, 'eod' => ($offset + $limit) > count($articles)];
     }
 }
