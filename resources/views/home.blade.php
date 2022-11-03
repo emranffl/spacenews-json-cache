@@ -9,46 +9,32 @@
     use App\Functions\Fetch;
     
     try {
-        if (Cache::has('cachedArticles')) {
-            $articles = Cache::store('redis')->get('cachedArticles');
+        $articlesJSONPath = storage_path() . '/json/articles-data.json';
+        $marsPhotoJSONPath = storage_path() . '/json/mars-photo-data.json';
     
-            echo 'articles served from cache';
-        } else {
-            $articles = Cache::store('redis')->remember('cachedArticles', 60 * 15, function () {
-                return (new Fetch())->fetch_articles();
-            });
+        if ($articlesJSONPath) {
+            $articles = json_decode(file_get_contents($articlesJSONPath), true);
     
-            echo 'articles served from API';
+            if (!count($articles)) {
+                // fetching articles from API
+                $articles = (new Fetch())->fetch_articles();
+    
+                // caching articles to JSON file
+                // file_put_contents($articlesJSONPath, json_encode($articles));
+            }
         }
     
-        if (Cache::has('cachedMarsPhotoData')) {
-            $marsPhotoCollection = Cache::store('redis')->get('cachedMarsPhotoData');
+        if ($marsPhotoJSONPath) {
+            $marsPhotoCollection = json_decode(file_get_contents($marsPhotoJSONPath), true);
     
-            echo 'mars photos served from cache';
-        } else {
-            $marsPhotoCollection = Cache::store('redis')->remember('cachedMarsPhotoData', 60 * 60 * 24, function () {
-                return (new Fetch())->fetch_mars_photos();
-            });
+            if (!count($marsPhotoCollection)) {
+                // fetching mars photos from API
+                $marsPhotoCollection = (new Fetch())->fetch_mars_photos();
     
-            echo 'mars photos served from API';
+                // caching mars photos to JSON file
+                // file_put_contents($marsPhotoJSONPath, json_encode($marsPhotoCollection));
+            }
         }
-    
-        // $articlesJSONPath = storage_path() . '/json/articles-data.json';
-        // $marsPhotoJSONPath = storage_path() . '/json/mars-photo-data.json';
-    
-        // if ($articlesJSONPath) {
-        //     $articles = json_decode(file_get_contents($articlesJSONPath), true);
-    
-        //     if (count($articles)) {
-        //         echo json_encode($articles);
-        //     } else {
-        //         // fetching articles from API
-        //         $articles = (new Fetch())->fetch_articles();
-    
-        //         // caching articles to JSON file
-        //         file_put_contents($articlesJSONPath, json_encode($articles));
-        //     }
-        // }
     } catch (\Throwable $th) {
         $redisAvailable = false;
         $fetch = new Fetch();

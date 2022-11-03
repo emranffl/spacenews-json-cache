@@ -20,28 +20,28 @@ class CardLoaderController extends Controller
         $limit = 12;
         $viewHTML = '';
 
-        try {
+        // try {
 
-            if (Cache::has('cachedArticles') && Cache::has('cachedMarsPhotoData')) {
-                $articles = Cache::store('redis')->get('cachedArticles');
-                $marsPhotoCollection = Cache::store('redis')->get('cachedMarsPhotoData');
-            } else
-                return ['redirect' => '/'];
-        } catch (Throwable $th) {
-            $fetch = new Fetch();
+        //     if (Cache::has('cachedArticles') && Cache::has('cachedMarsPhotoData')) {
+        //         $articles = Cache::store('redis')->get('cachedArticles');
+        //         $marsPhotoCollection = Cache::store('redis')->get('cachedMarsPhotoData');
+        //     } else
+        //         return ['redirect' => '/'];
+        // } catch (Throwable $th) {
+        //     $fetch = new Fetch();
 
-            $articles = $fetch->fetch_articles();
-            $marsPhotoCollection = $fetch->fetch_mars_photos();
-        }
+        //     $articles = $fetch->fetch_articles();
+        //     $marsPhotoCollection = $fetch->fetch_mars_photos();
+        // }
 
-        $photoObject = $marsPhotoCollection[array_rand($marsPhotoCollection, 1)];
+        // $photoObject = $marsPhotoCollection[array_rand($marsPhotoCollection, 1)];
 
-        foreach (array_splice($articles, $offset, $limit) as $index => $article) {
-            $loop = (object)['index' => $index];
+        // foreach (array_splice($articles, $offset, $limit) as $index => $article) {
+        //     $loop = (object)['index' => $index];
 
-            $viewHTML .= view('components.card', compact('loop', 'limit', 'article', 'marsPhotoCollection', 'photoObject'));
-        }
+        //     $viewHTML .= view('components.card', compact('loop', 'limit', 'article', 'marsPhotoCollection', 'photoObject'));
+        // }
 
-        return ['view' => $viewHTML, 'eod' => ($offset + $limit) > count($articles)];
+        // return ['view' => $viewHTML, 'eod' => ($offset + $limit) > count($articles)];
     }
 }
