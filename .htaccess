@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+
+    RewriteEngine On
+    
+    RewriteRule ^(.*)$ https://demo.emranffl.com/laravel/spacenews/public/$1 [L]
+
+</IfModule>

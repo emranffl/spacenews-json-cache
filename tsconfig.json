@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "listEmittedFiles": true,
+        "pretty": true,
+        "moduleResolution": "node",
+        "baseUrl": "./",
+        "strict": true,
+        "skipLibCheck": true
+    },
+    "include": ["resources/js/**/*"]
+}
