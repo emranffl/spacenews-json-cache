@@ -26,11 +26,11 @@
 </head>
 
 @section('NAVLINKS')
-    <a href="/" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Home</a>
+    {{-- <a href="/" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Home</a> --}}
 
     {{-- <a href="#" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Team</a> --}}
 
-    <a href="#" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">About</a>
+    {{-- <a href="#" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">About</a> --}}
 @endsection
 
 <body class="min-h-screen relative">
@@ -81,7 +81,7 @@
                     </a>
                 </div>
 
-                <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                {{-- <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                     <button type="button"
                         class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                         <span class="sr-only">View notifications</span>
@@ -92,7 +92,6 @@
                         </svg>
                     </button>
 
-                    {{-- //* profile dropdown --}}
                     <div class="ml-3 relative" x-data="{ profilemenudropdown: false }">
                         <div>
                             <button x-on:click="profilemenudropdown = ! profilemenudropdown" type="button"
@@ -124,7 +123,7 @@
                                 tabindex="-1" id="user-menu-item-2">Logout</a>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
 

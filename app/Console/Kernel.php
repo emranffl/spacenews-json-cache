@@ -33,6 +33,22 @@ class Kernel extends ConsoleKernel
 
             error_log('Articles data cached successfully');
         })->everyMinute();
+
+        // scheduling the caching mars photo data everyday
+        $schedule->call(function () {
+            $marsPhotoJSONPath = storage_path() . '/json/mars-photo-data.json';
+
+            if ($marsPhotoJSONPath) {
+                // fetching mars photos from API
+                $marsPhotos = (new Fetch())->fetch_mars_photos();
+
+                // caching mars photos to JSON file
+                file_put_contents($marsPhotoJSONPath, json_encode($marsPhotos));
+            } else
+                throw new \Exception('Mars photos JSON file not found');
+
+            error_log('Mars photos data cached successfully');
+        })->daily();
     }
 
     /**
